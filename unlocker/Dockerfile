@@ -3,3 +3,4 @@ RUN mkdir /unlocker
 WORKDIR /unlocker
 COPY main.py /unlocker
 RUN pip install requests
+ENTRYPOINT python3 /unlocker/main.py
