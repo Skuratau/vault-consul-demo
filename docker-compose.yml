@@ -46,7 +46,6 @@ services:
       - "0.0.0.0:8200:8200"
     cap_add:
       - IPC_LOCK
-    command: server -config=/vault/config/config.json
     environment:
       VAULT_ADDR: "http://0.0.0.0:8200"
     depends_on:
