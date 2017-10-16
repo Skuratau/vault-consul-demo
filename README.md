@@ -23,5 +23,5 @@ cd /opt;
 sudo git clone https://github.com/Skuratau/vault-consul-demo.git vault
 cd /opt/vault/unlocker
 sudo bash ./build.sh
-cd -
+cd /opt/vault
 sudo docker-compose up -d
