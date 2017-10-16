@@ -1,5 +1,6 @@
 # vault-consul-demo
 
+```
 sudo apt-get remove -y docker docker-engine docker.io
 sudo apt-get install -y\
     apt-transport-https \
@@ -22,4 +23,4 @@ cd /opt;
 git clone https://github.com/Skuratau/vault-consul-demo.git vault
 bash vault/unlocker/build.sh
 cd ./vault
-docker-compose up -d
+docker-compose up -d```
