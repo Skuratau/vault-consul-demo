@@ -1,0 +1,77 @@
+version: "3.3"
+networks:
+  back-tier:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
+services:
+  consul:
+    image: "consul"
+    container_name: "consul"
+    volumes:
+      - ./consul/config:/consul/config:rw
+      - ./consul/data:/consul/data:rw
+    networks:
+      - back-tier
+    ports:
+      - "0.0.0.0:8500:8500"
+      - "172.28.0.1:53:8600/udp"
+    entrypoint: consul agent -config-dir=/consul/config
+
+  consul-registrator:
+    image: "gliderlabs/registrator"
+    container_name: "registrator"
+    # restart: "always"
+    network_mode: "service:consul"
+    command: consul://localhost:8500
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    depends_on:
+      - consul
+
+  vault:
+    image: "vault"
+    # restart: "always"
+    container_name: "vault"
+    entrypoint: vault server -config=/vault/config/
+    volumes:
+      - ./vault/file:/vault/file:rw
+      - ./vault/config:/vault/config:rw
+    networks:
+      - back-tier
+    ports:
+      - "0.0.0.0:8200:8200"
+    cap_add:
+      - IPC_LOCK
+    command: server -config=/vault/config/config.json
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
+    depends_on:
+      - consul
+
+
+  unlocker:
+    image: unlocker:latest
+    container_name: unlocker
+    depends_on:
+      - vault
+    networks:
+      - back-tier
+
+  vault-ui:
+    image: "djenriquez/vault-ui"
+    container_name: "vault-ui"
+    networks:
+      - back-tier
+    ports:
+      - "0.0.0.0:8000:8000"
+    environment:
+      VAULT_URL_DEFAULT: "http://vault.service.consul:8200"
+    dns: 172.28.0.1
+    dns_search:
+      - service.consul
+    depends_on:
+      - vault
