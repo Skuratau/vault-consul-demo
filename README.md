@@ -20,7 +20,8 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-c
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 cd /opt;
-git clone https://github.com/Skuratau/vault-consul-demo.git vault
-bash vault/unlocker/build.sh
+sudo git clone https://github.com/Skuratau/vault-consul-demo.git vault
+sudo bash ./vault/unlocker/build.sh
 cd ./vault
-docker-compose up -d```
+sudo docker-compose up -d
+
