@@ -21,7 +21,6 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 cd /opt;
 sudo git clone https://github.com/Skuratau/vault-consul-demo.git vault
-sudo bash ./vault/unlocker/build.sh
+sudo bash /opt/vault/unlocker/build.sh
 cd ./vault
 sudo docker-compose up -d
-
